@@ -6,6 +6,8 @@ import helmet from "helmet"
 import morgan from "morgan"
 import { dbConnection } from "./mongo.js"
 import apiLimiter from "../src/middlewares/rate-limit-validator.js"
+import authRoutes from "../src/auth/auth.routes.js"
+import { swaggerDocs, swaggerUi } from "./swagger.js";
 
 const middlewares = (app) => {
     app.use(express.urlencoded({extended: false}))
@@ -24,6 +26,11 @@ const conectarDB = async () =>{
         process.exit(1)
     }
 }
+
+const routes = (app) => {
+    app.use("/comercialPF/v1/auth", authRoutes);
+    app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs))
+};
 
 export const initServer = () => {
     const app = express()

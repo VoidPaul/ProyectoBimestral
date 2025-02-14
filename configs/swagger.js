@@ -21,9 +21,9 @@ const options ={
     },
     apis:[
         "./src/auth/auth.routes.js",
-        "./src/user/user.routes.js",
+        /*"./src/user/user.routes.js",
         "./src/pet/pet.routes.js",
-        "./src/appointment/appointment.routes.js"
+        "./src/appointment/appointment.routes.js"*/
     ]
 }
 
