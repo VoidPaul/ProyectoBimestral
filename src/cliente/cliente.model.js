@@ -19,8 +19,11 @@ const clienteSchema = Schema({
   },
   rol: {
     type: String,
-    enum: ["CLIENT"],
-    default: "CLIENT",
+    enum: ["CLIENTE"],
+    default: "CLIENTE",
+  },
+  profilePicture:{
+    type: String
   },
   direccion: {
     type: String,
@@ -34,6 +37,14 @@ const clienteSchema = Schema({
     type: Date,
     default: Date.now,
   },
+  status:{
+    type: Boolean,
+    default: true
+}
+},
+{
+versionKey: false,
+timeStamps: true
 });
 
 clienteSchema.methods.toJSON = function(){
