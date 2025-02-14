@@ -1,6 +1,6 @@
 import { Schema, model} from "mongoose";
 
-const ClienteSchema = new mongoose.Schema({
+const clienteSchema = Schema({
   nombre: {
     type: String,
     required: true,
@@ -30,24 +30,16 @@ const ClienteSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  historialCompras: [
-    {
-      factura: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Factura",
-      },
-    },
-  ],
   creadoEn: {
     type: Date,
     default: Date.now,
   },
 });
 
-userSchema.methods.toJSON = function(){
+clienteSchema.methods.toJSON = function(){
     const {password, _id, ...usuario} = this.toObject()
     usuario.uid = _id
     return usuario
 }
 
-export default model("Cliente", ClienteSchema)
+export default model("Cliente", clienteSchema)
