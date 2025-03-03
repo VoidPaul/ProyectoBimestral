@@ -5,7 +5,7 @@ const createAdmin = async () => {
         const adminExists = await User.findOne({ role: "ADMIN" });
         if (!adminExists) {
             const adminData = {
-                name: "Admin",
+                nombre: "Admin",
                 apellido: "User",
                 email: "admin@example.com",
                 password: "Adminpassword123",

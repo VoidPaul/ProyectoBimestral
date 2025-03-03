@@ -37,9 +37,9 @@ const routes = (app) => {
 export const initServer = () => {
     const app = express()
     try{
-        middlewares(app)
-        conectarDB()
-        routes(app)
+        middlewares(app);
+        conectarDB();
+        routes(app);
         app.listen(process.env.PORT)
         console.log(`Server running on port ${process.env.PORT}`)
     }catch(err){
