@@ -8,7 +8,6 @@ export const register = async (req, res) => {
         let profilePicture = req.file ? req.file.filename : null;
         const encryptedPassword = await hash(data.password);
         data.password = encryptedPassword;
-        data.profilePicture = profilePicture;
 
         const cliente = await Cliente.create(data);
 
