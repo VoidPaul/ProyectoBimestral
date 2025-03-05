@@ -7,6 +7,11 @@ export const register = async (req, res) => {
         const data = req.body;
         const encryptedPassword = await hash(data.password);
         data.password = encryptedPassword;
+        productos
+        main
+        data.profilePicture = profilePicture;
+        data.role = "cliente"; 
+
 
         const cliente = await Cliente.create(data);
 
