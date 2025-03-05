@@ -7,6 +7,7 @@ import morgan from "morgan"
 import { dbConnection } from "./mongo.js"
 import apiLimiter from "../src/middlewares/rate-limit-validator.js"
 import authRoutes from "../src/auth/auth.routes.js"
+import clienteroutes from "../src/cliente/cliente.routes.js"
 import { swaggerDocs, swaggerUi } from "./swagger.js";
 import createAdmin from "./admin.js"
 
@@ -31,6 +32,8 @@ const conectarDB = async () =>{
 
 const routes = (app) => {
     app.use("/supermercado/v1/auth", authRoutes);
+    app.use("/comercialPF/v1/auth", authRoutes);
+    app.use("/comercialPF/v1/cliente", clienteroutes);
     app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs))
 };
 
