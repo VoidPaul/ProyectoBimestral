@@ -20,7 +20,6 @@
   },
   "homepage": "https://github.com/AngelJTumG/ProyectoBimestral#readme",
   "dependencies": {
-    "argon": "^2.0.21",
     "argon2": "^0.41.1",
     "express": "^4.21.2",
     "mongoose": "^8.10.0",

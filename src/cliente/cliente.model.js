@@ -6,6 +6,10 @@ const clienteSchema = Schema({
     required: true,
     trim: true,
   },
+  apellido: {
+    type: String,
+    required: true,
+  },
   email: {
     type: String,
     required: true,
@@ -19,11 +23,8 @@ const clienteSchema = Schema({
   },
   rol: {
     type: String,
-    enum: ["CLIENTE"],
+    enum: ["CLIENTE", "ADMIN"],
     default: "CLIENTE",
-  },
-  profilePicture:{
-    type: String
   },
   direccion: {
     type: String,
