@@ -7,11 +7,8 @@ export const register = async (req, res) => {
         const data = req.body;
         const encryptedPassword = await hash(data.password);
         data.password = encryptedPassword;
-        productos
-        main
-        data.profilePicture = profilePicture;
-        data.role = "cliente"; 
-
+        
+        data.role = "CLIENTE"; 
 
         const cliente = await Cliente.create(data);
 
@@ -59,8 +56,33 @@ export const login = async (req, res) => {
             }
         });
     } catch (err) {
+        console.error("Error during login:", err.message, err.stack); // Agrega más detalles del error
         return res.status(500).json({
             message: "Inicio de sesión fallido, error del servidor",
+            error: err.message
+        });
+    }
+};
+
+export const registerAdmin = async (req, res) => {
+    try {
+        const data = req.body;
+        let profilePicture = req.file ? req.file.filename : null;
+        const encryptedPassword = await hash(data.password);
+        data.password = encryptedPassword;
+        data.profilePicture = profilePicture;
+        data.role = "ADMIN";
+
+        const user = await Cliente.create(data);
+
+        return res.status(201).json({
+            message: "Administrador ha sido creado",
+            nombre: user.nombre,
+            email: user.email
+        });
+    } catch (err) {
+        return res.status(500).json({
+            message: "Registro de administrador fallido",
             error: err.message
         });
     }

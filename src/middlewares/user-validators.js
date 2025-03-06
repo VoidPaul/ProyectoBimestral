@@ -65,3 +65,22 @@ export const updateProfilePictureValidator = [
     deleteFileOnError,
     handleErrors
 ];
+
+export const registerAdminValidator = [
+    body("nombre").notEmpty().withMessage("El nombre es requerido"),
+    body("apellido").notEmpty().withMessage("El apellido es requerido"),
+    body("email").notEmpty().withMessage("El email es requerido"),
+    body("email").isEmail().withMessage("No es un email válido"),
+    body("email").custom(emailExists),
+    body("password").isStrongPassword({
+        minLength: 8,
+        minLowercase: 1,
+        minUppercase: 1,
+        minNumbers: 1,
+        minSymbols: 1
+    }).withMessage("El password debe contener al menos 8 caracteres, una letra minúscula, una letra mayúscula, un número y un símbolo"),
+    body("telefono").notEmpty().withMessage("El teléfono es requerido"),
+    validarCampos,
+    deleteFileOnError,
+    handleErrors
+];

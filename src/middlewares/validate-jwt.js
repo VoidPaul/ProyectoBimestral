@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import Admin from "../cliente/cliente.model.js";
+import Cliente from "../cliente/cliente.model.js";
 
 export const validateJWT = async (req, res, next) => {
     try {
@@ -16,23 +16,23 @@ export const validateJWT = async (req, res, next) => {
 
         const { uid } = jwt.verify(token, process.env.KEY);
 
-        const admin = await Admin.findById(uid);
+        const cliente = await Cliente.findById(uid);
 
-        if (!admin) {
+        if (!cliente) {
             return res.status(400).json({
                 success: false,
-                message: "El administrador no existe en la DB"
+                message: "El cliente no existe en la DB"
             });
         }
 
-        if (admin.status === false) {
+        if (cliente.status === false) {
             return res.status(400).json({
                 success: false,
-                message: "Administrador desactivado previamente"
+                message: "Cliente desactivado previamente"
             });
         }
 
-        req.usuario = admin;
+        req.usuario = cliente;
         next();
     } catch (err) {
         return res.status(500).json({

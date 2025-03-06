@@ -1,26 +1,27 @@
-import User from '../src/cliente/cliente.model.js';
+import { hash } from 'argon2';
+import Cliente from '../src/cliente/cliente.model.js';
 
 const createAdmin = async () => {
     try {
-        const adminExists = await User.findOne({ role: "ADMIN" });
+        const adminExists = await Cliente.findOne({ role: "ADMIN" });
         if (!adminExists) {
             const adminData = {
                 nombre: "Admin",
                 apellido: "User",
                 email: "admin@example.com",
-                password: "Adminpassword123",
+                password: await hash("Adminpassword123"), // Encripta la contraseña
                 role: "ADMIN",
                 direccion: "zona 7",
                 telefono: "12345678",
-                
+                profilePicture: "pictureAdmin.jpg" // Asegúrate de incluir la imagen de perfil si es necesario
             };
-            await User.create(adminData);
-            console.log("Admin user created successfully");
+            await Cliente.create(adminData);
+            console.log("Usuario administrador creado exitosamente");
         } else {
-            console.log("Admin user already exists");
+            console.log("El usuario administrador ya existe");
         }
     } catch (err) {
-        console.error("Error creating admin user or default category:", err);
+        console.error("Error creando el usuario administrador:", err);
     }
 };
 

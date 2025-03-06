@@ -1,50 +1,52 @@
 "use strict"
 
-import express from "express"
-import cors from "cors"
-import helmet from "helmet"
-import morgan from "morgan"
-import { dbConnection } from "./mongo.js"
-import apiLimiter from "../src/middlewares/rate-limit-validator.js"
-import authRoutes from "../src/auth/auth.routes.js"
-import clienteroutes from "../src/cliente/cliente.routes.js"
+import express from "express";
+import cors from "cors";
+import helmet from "helmet";
+import morgan from "morgan";
+import { dbConnection } from "./mongo.js";
+import apiLimiter from "../src/middlewares/rate-limit-validator.js";
+import authRoutes from "../src/auth/auth.routes.js";
+import clienteroutes from "../src/cliente/cliente.routes.js";
 import { swaggerDocs, swaggerUi } from "./swagger.js";
-import createAdmin from "./admin.js"
+import createAdmin from "./admin.js";
 
 const middlewares = (app) => {
-    app.use(express.urlencoded({extended: false}))
-    app.use(express.json())
-    app.use(cors())
-    app.use(helmet())
-    app.use(morgan("dev"))
-    app.use(apiLimiter)
+    app.use(express.urlencoded({ extended: false }));
+    app.use(express.json());
+    app.use(cors());
+    app.use(helmet());
+    app.use(morgan("dev"));
+    app.use(apiLimiter);
 }
 
-const conectarDB = async () =>{
-    try{
+const conectarDB = async () => {
+    try {
         await dbConnection();
         await createAdmin();
-    }catch(err){
-        console.log(`Database connection failed: ${err}`)
-        process.exit(1)
+    } catch (err) {
+        console.log(`Database connection failed: ${err}`);
+        process.exit(1);
     }
 }
 
 const routes = (app) => {
     app.use("/supermercado/v1/auth", authRoutes);
     app.use("/comercialPF/v1/cliente", clienteroutes);
-    app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs))
+    app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 };
 
 export const initServer = () => {
-    const app = express()
-    try{
+    const app = express();
+    try {
         middlewares(app);
         conectarDB();
         routes(app);
-        app.listen(process.env.PORT)
-        console.log(`Server running on port ${process.env.PORT}`)
-    }catch(err){
-        console.log(`Server init failed: ${err}`)
+        const PORT = process.env.PORT || 3001;
+        app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`);
+        });
+    } catch (err) {
+        console.log(`Server init failed: ${err}`);
     }
 }
