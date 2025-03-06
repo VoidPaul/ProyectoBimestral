@@ -32,7 +32,6 @@ const conectarDB = async () =>{
 
 const routes = (app) => {
     app.use("/supermercado/v1/auth", authRoutes);
-    app.use("/comercialPF/v1/auth", authRoutes);
     app.use("/comercialPF/v1/cliente", clienteroutes);
     app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs))
 };
