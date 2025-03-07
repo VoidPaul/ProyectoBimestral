@@ -10,6 +10,7 @@ import authRoutes from "../src/auth/auth.routes.js";
 import clienteroutes from "../src/cliente/cliente.routes.js";
 import categoriaRoutes from "../src/categoria/categoria.routes.js";
 import productoRoutes from "../src/product/product.routes.js";
+import carritoRoutes from "../src/carrito/carrito.routes.js";
 import { swaggerDocs, swaggerUi } from "./swagger.js";
 import createAdmin from "./admin.js";
 import createCategory from "./categoria.js";
@@ -39,6 +40,7 @@ const routes = (app) => {
     app.use("/supermercado/v1/cliente", clienteroutes);
     app.use("/supermercado/v1/categoria", categoriaRoutes);
     app.use("/supermercado/v1/producto", productoRoutes);
+    app.use("/supermercado/v1/carrito", carritoRoutes);
     app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 };
 
