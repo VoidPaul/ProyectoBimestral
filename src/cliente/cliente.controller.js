@@ -131,38 +131,23 @@ export const updateCliente = async (req, res) => {
     }
 };
 
-export const updateProfilePicture = async (req, res) => {
+export const updateRol = async (req, res) => {
     try {
         const { uid } = req.params;
-        let newProfilePicture = req.file ? req.file.filename : null;
+        const { role } = req.body;
 
-        if (!newProfilePicture) {
-            return res.status(400).json({
-                success: false,
-                msg: 'No se proporcionó una nueva foto de perfil',
-            });
-        }
-
-        const cliente = await Cliente.findById(uid);
-
-        if (cliente.profilePicture) {
-            const oldProfilePicturePath = join(__dirname, "../../public/uploads/profile-pictures", cliente.profilePicture);
-            await fs.unlink(oldProfilePicturePath);
-        }
-
-        cliente.profilePicture = newProfilePicture;
-        await cliente.save();
+        const updatedRol = await Cliente.findByIdAndUpdate(uid, { role }, { new: true });
 
         res.status(200).json({
             success: true,
-            msg: 'Foto de perfil actualizada',
-            cliente,
+            message: 'Rol actualizado',
+            updatedRol,
         });
-    } catch (err) {
-        res.status(500).json({
+    } catch (error) {
+        return res.status(500).json({
             success: false,
-            msg: 'Error al actualizar la foto de perfil',
-            error: err.message
+            message: 'Error al actualizar el rol',
+            error: error.message
         });
     }
 };

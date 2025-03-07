@@ -9,16 +9,16 @@ const createAdmin = async () => {
                 nombre: "Admin",
                 apellido: "User",
                 email: "admin@example.com",
-                password: await hash("Adminpassword123"), // Encripta la contraseña
+                password: await hash("Adminpassword123"), 
                 role: "ADMIN",
                 direccion: "zona 7",
                 telefono: "12345678",
-                profilePicture: "pictureAdmin.jpg" // Asegúrate de incluir la imagen de perfil si es necesario
+                profilePicture: "pictureAdmin.jpg" 
             };
             await Cliente.create(adminData);
-            console.log("Usuario administrador creado exitosamente");
+            console.log("Admin creado exitosamente");
         } else {
-            console.log("El usuario administrador ya existe");
+            console.log("Admin ya existe");
         }
     } catch (err) {
         console.error("Error creando el usuario administrador:", err);

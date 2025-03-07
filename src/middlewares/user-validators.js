@@ -3,6 +3,7 @@ import { emailExists, userExists } from "../helpers/db-validators.js";
 import { validarCampos } from "./validate-fields.js";
 import { deleteFileOnError } from "./delete-file-on-error.js";
 import { handleErrors } from "./handle-errors.js";
+import { validateJWT } from "./validate-jwt.js";
 
 export const registerValidator = [
     body("nombre").notEmpty().withMessage("El nombre es requerido"),
@@ -30,10 +31,15 @@ export const loginValidator = [
 ];
 
 export const getUserByIdValidator = [
+    validateJWT,
     param("uid").isMongoId().withMessage("No es un ID válido de MongoDB"),
     param("uid").custom(userExists),
     validarCampos,
     handleErrors
+];
+
+export const getClientesValidator = [
+    validateJWT
 ];
 
 export const deleteUserValidator = [
@@ -58,13 +64,7 @@ export const updateUserValidator = [
     handleErrors
 ];
 
-export const updateProfilePictureValidator = [
-    param("uid").isMongoId().withMessage("No es un ID válido de MongoDB"),
-    param("uid").custom(userExists),
-    validarCampos,
-    deleteFileOnError,
-    handleErrors
-];
+
 
 export const registerAdminValidator = [
     body("nombre").notEmpty().withMessage("El nombre es requerido"),
@@ -82,5 +82,13 @@ export const registerAdminValidator = [
     body("telefono").notEmpty().withMessage("El teléfono es requerido"),
     validarCampos,
     deleteFileOnError,
+    handleErrors
+];
+
+export const updateRolValidator = [
+    param("uid").isMongoId().withMessage("No es un ID válido de MongoDB"),
+    param("uid").custom(userExists),
+    body("rol").notEmpty().withMessage("El rol es requerido"),
+    validarCampos,
     handleErrors
 ];
