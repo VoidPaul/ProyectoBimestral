@@ -5,12 +5,17 @@ const categoriaSchema = Schema({
     type: String,
     required: true,
     trim: true,
+    unique: true
   },
   descripcion: {
     type: String,
     required: true,
     trim: true,
   },
+  estado: {
+    type: Boolean,
+    default: true
+  }
 },
 {
   versionKey: false,

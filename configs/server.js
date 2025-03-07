@@ -8,8 +8,10 @@ import { dbConnection } from "./mongo.js";
 import apiLimiter from "../src/middlewares/rate-limit-validator.js";
 import authRoutes from "../src/auth/auth.routes.js";
 import clienteroutes from "../src/cliente/cliente.routes.js";
+import categoriaRoutes from "../src/categoria/categoria.routes.js";
 import { swaggerDocs, swaggerUi } from "./swagger.js";
 import createAdmin from "./admin.js";
+import createCategory from "./categoria.js";
 
 const middlewares = (app) => {
     app.use(express.urlencoded({ extended: false }));
@@ -24,6 +26,7 @@ const conectarDB = async () => {
     try {
         await dbConnection();
         await createAdmin();
+        await createCategory();
     } catch (err) {
         console.log(`Database connection failed: ${err}`);
         process.exit(1);
@@ -33,6 +36,7 @@ const conectarDB = async () => {
 const routes = (app) => {
     app.use("/supermercado/v1/auth", authRoutes);
     app.use("/supermercado/v1/cliente", clienteroutes);
+    app.use("/supermercado/v1/categoria", categoriaRoutes);
     app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 };
 
