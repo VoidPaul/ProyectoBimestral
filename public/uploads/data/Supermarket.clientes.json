@@ -1,5 +1,27 @@
 [{
   "_id": {
+    "$oid": "67caf22a10b6818b5562049a"
+  },
+  "nombre": "Admin",
+  "apellido": "User",
+  "email": "admin@example.com",
+  "password": "$argon2id$v=19$m=65536,t=3,p=4$Ig+h48fZPD7jSrp5SH7KUg$HV/UVH7uSk4gU5VGl7uxaCqLJwTlk2m+FiZDg+EagVo",
+  "role": "ADMIN",
+  "direccion": "zona 7",
+  "telefono": "12345678",
+  "status": true,
+  "creadoEn": {
+    "$date": "2025-03-07T13:18:34.657Z"
+  },
+  "createdAt": {
+    "$date": "2025-03-07T13:18:34.662Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-07T13:18:34.662Z"
+  }
+},
+{
+  "_id": {
     "$oid": "67c911e44ef7085a5187fda5"
   },
   "nombre": "Juan",
@@ -14,23 +36,7 @@
     "$date": "2025-03-06T03:09:24.210Z"
   },
   "updatedAt": {
-    "$date": "2025-03-07T02:57:37.479Z"
-  }
-},
-{
-  "_id": {
-    "$oid": "67c92a4f3fb830a1da59304d"
-  },
-  "nombre": "Admin",
-  "apellido": "User",
-  "email": "admin@example.com",
-  "password": "Adminpassword123",
-  "rol": "CLIENTE",
-  "direccion": "zona 7",
-  "telefono": "12345678",
-  "status": true,
-  "creadoEn": {
-    "$date": "2025-03-06T04:53:35.186Z"
+    "$date": "2025-03-07T16:17:02.297Z"
   }
 },
 {
@@ -44,7 +50,7 @@
   "role": "ADMIN",
   "direccion": "zona 7",
   "telefono": "12345678",
-  "status": true,
+  "status": false,
   "creadoEn": {
     "$date": "2025-03-06T05:45:31.058Z"
   },
@@ -52,7 +58,7 @@
     "$date": "2025-03-06T05:45:31.058Z"
   },
   "updatedAt": {
-    "$date": "2025-03-06T05:45:31.058Z"
+    "$date": "2025-03-07T16:00:32.265Z"
   }
 },
 {
@@ -75,5 +81,49 @@
   },
   "updatedAt": {
     "$date": "2025-03-07T03:07:41.029Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67caf9af2dad4d94f55d6e62"
+  },
+  "nombre": "Juan",
+  "apellido": "Pérez",
+  "email": "juan.aapereza@example.com",
+  "password": "$argon2id$v=19$m=65536,t=3,p=4$rIC3xwm7ddi2hRaxMRxX1g$9u16Uw+Zz3NVQtmzzun6rOzD7oUFEGyTtoL7z685LFc",
+  "role": "CLIENTE",
+  "direccion": "Calle Falsa 123",
+  "telefono": "1234567890",
+  "status": true,
+  "creadoEn": {
+    "$date": "2025-03-07T13:50:39.666Z"
+  },
+  "createdAt": {
+    "$date": "2025-03-07T13:50:39.670Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-07T13:50:39.670Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67cb0fa6872e79b99c5f66d2"
+  },
+  "nombre": "Diego",
+  "apellido": "Lopez",
+  "email": "diego.lopez@example.com",
+  "password": "Password123++",
+  "role": "CLIENTE",
+  "direccion": "Calle Falsa 123",
+  "telefono": "1234567890",
+  "status": true,
+  "creadoEn": {
+    "$date": "2025-03-07T15:24:22.344Z"
+  },
+  "createdAt": {
+    "$date": "2025-03-07T15:24:22.349Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-07T16:15:19.957Z"
   }
 }]

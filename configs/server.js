@@ -43,7 +43,7 @@ const routes = (app) => {
     app.use("/supermercado/v1/producto", productoRoutes);
     app.use("/supermercado/v1/carrito", carritoRoutes);
     app.use("/supermercado/v1/factura", facturaRoutes); 
-    app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+    app.use("/supermercado/v1/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs))
 };
 
 export const initServer = () => {
