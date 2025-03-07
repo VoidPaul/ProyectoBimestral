@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "614b8ae8-48e6-40a3-95b0-9cfe21b59631",
+		"_postman_id": "a4ec8551-1075-4ed8-bb62-add61ad795dd",
 		"name": "Supermercado",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "38544411"
+		"_exporter_id": "42926224"
 	},
 	"item": [
 		{
@@ -34,38 +34,6 @@
 								"supermercado",
 								"v1",
 								"auth",
-								"register"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "RegisterAdmin",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"nombre\": \"Admin\",\r\n    \"apellido\": \"User\",\r\n    \"email\": \"admins@example.com\",\r\n    \"password\": \"Adminpassword123+\",\r\n    \"direccion\": \"zona 7\",\r\n    \"telefono\": \"12345678\",\r\n    \"role\": \"ADMIN\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3001/supermercado/v1/auth/admin/register",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3001",
-							"path": [
-								"supermercado",
-								"v1",
-								"auth",
-								"admin",
 								"register"
 							]
 						}
