@@ -65,7 +65,6 @@ export const updateUserValidator = [
 ];
 
 
-
 export const registerAdminValidator = [
     body("nombre").notEmpty().withMessage("El nombre es requerido"),
     body("apellido").notEmpty().withMessage("El apellido es requerido"),
