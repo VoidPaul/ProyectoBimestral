@@ -3,14 +3,14 @@ import { Schema, model } from "mongoose";
 const carritoSchema = new Schema({
     usuarioId: {
         type: Schema.Types.ObjectId,
-        ref: "Usuario",
+        ref: "Cliente",
         required: true
     },
-    productos: [
+    productos: [ 
         {
             productoId: {
                 type: Schema.Types.ObjectId,
-                ref: "Producto",
+                ref: "Product",
                 required: true
             },
             cantidad: {

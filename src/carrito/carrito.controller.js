@@ -1,9 +1,15 @@
+import mongoose from 'mongoose';
 import Carrito from "./carrito.model.js";
-import Producto from "../product/product.model.js";
+import Product from "../product/product.model.js"; 
 import Factura from "../invoices/invoices.model.js";
 import PDFDocument from "pdfkit";
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export const agregarProductosAlCarrito = async (req, res) => {
     try {
@@ -72,18 +78,7 @@ export const obtenerProductosDelCarrito = async (req, res) => {
 export const completarCompra = async (req, res) => {
     try {
         const usuarioId = req.usuario._id;
-        const { nombreTarjeta, numeroTarjeta, fechaExpiracion, cvv } = req.body;
-        const carritoId = req.params.carritoId;
-
-        if (!nombreTarjeta || !numeroTarjeta || !fechaExpiracion || !cvv) {
-            return res.status(400).json({
-                success: false,
-                message: "Información del método de pago incompleta"
-            });
-        }
-
-        const carrito = await Carrito.findById(carritoId).populate('productos.productoId');
-
+        const carrito = await Carrito.findOne({ usuarioId }).populate("productos.productoId");
         if (!carrito || carrito.productos.length === 0) {
             return res.status(400).json({
                 success: false,
@@ -91,71 +86,78 @@ export const completarCompra = async (req, res) => {
             });
         }
 
+        let total = 0;
+        const productosComprados = [];
+
         for (const item of carrito.productos) {
-            const producto = await Producto.findById(item.productoId);
-            if (!producto) {
-                return res.status(404).json({
-                    success: false,
-                    message: `Producto con ID ${item.productoId} no encontrado`
-                });
-            }
+            const producto = item.productoId;
             if (producto.stock < item.cantidad) {
                 return res.status(400).json({
                     success: false,
-                    message: `Stock insuficiente para el producto ${producto.nombre}`
+                    message: `Hay pocas unidades disponibles para el producto ${producto.nombrePro}`
                 });
             }
             producto.stock -= item.cantidad;
+            producto.ventas += item.cantidad;
             await producto.save();
+
+            const totalProducto = producto.precio * item.cantidad;
+            total += totalProducto;
+            productosComprados.push({
+                producto: producto._id,
+                nombrePro: producto.nombrePro,
+                cantidad: item.cantidad,
+                precio: producto.precio,
+                totalProducto
+            });
         }
 
-        const total = carrito.productos.reduce((acc, item) => acc + item.productoId.precio * item.cantidad, 0);
         const factura = new Factura({
-            usuarioId,
-            productos: carrito.productos,
+            usuarioId: req.usuario._id,
+            productos: productosComprados,
             total,
-            metodoPago: {
-                nombreTarjeta,
-                numeroTarjeta,
-                fechaExpiracion,
-                cvv
-            }
+            fecha: new Date()
         });
+
         await factura.save();
 
-        await Carrito.findByIdAndDelete(carritoId);
+        carrito.productos = [];
+        await carrito.save();
 
         const doc = new PDFDocument();
-        const filePath = path.join(__dirname, '../../public/facturas', `factura_${factura._id}.pdf`);
+        const filePath = `./public/uploads/invoice-doc/factura-${req.usuario._id}_${Date.now()}.pdf`;
         doc.pipe(fs.createWriteStream(filePath));
+        doc.fontSize(16).text('Factura', { align: 'center' });
+        doc.moveDown(1);
+        doc.fontSize(12).text(`Fecha: ${new Date().toLocaleString()}`, { align: 'right' });
+        doc.moveDown(1);
+        doc.text('----------------------------------');
+        doc.text(`Usuario: ${req.usuario.nombre}`);
+        doc.text('----------------------------------');
+        doc.moveDown(1);
 
-        doc.fontSize(25).text('Factura', { align: 'center' });
-        doc.moveDown();
-        doc.fontSize(16).text(`ID de Factura: ${factura._id}`);
-        doc.text(`Fecha: ${factura.fecha}`);
-        doc.text(`Total: Q${factura.total}`);
-        doc.moveDown();
-        doc.text('Productos:');
-        doc.moveDown();
-
-        factura.productos.forEach((item, index) => {
-            doc.text(`${index + 1}. ${item.productoId.nombrePro} - Cantidad: ${item.cantidad}`);
-            doc.text('----------------------------------------');
+        productosComprados.forEach(producto => {
+            doc.text(`Producto: ${producto.nombrePro}`);
+            doc.text(`Cantidad: ${producto.cantidad}`);
+            doc.text(`Precio: Q.${producto.precio}.00`);
+            doc.text(`Total: Q.${producto.totalProducto}.00`);
+            doc.text('----------------------------------');
         });
-
+        doc.text(`Total: Q.${total}.00`);
+        doc.text('----------------------------------');
         doc.end();
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
-            message: "Compra completada con éxito",
-            factura,
-            pdfPath: filePath
+            message: "Compra completada",
+            factura
         });
-    } catch (err) {
-        res.status(500).json({
+
+    } catch (error) {
+        return res.status(500).json({
             success: false,
             message: "Error al completar la compra",
-            error: err.message
+            error: error.message
         });
     }
 };
