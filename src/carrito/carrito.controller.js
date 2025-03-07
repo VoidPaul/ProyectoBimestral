@@ -1,6 +1,9 @@
 import Carrito from "./carrito.model.js";
-import  Product  from "../product/product.model.js";
+import Producto from "../product/product.model.js";
 import Factura from "../invoices/invoices.model.js";
+import PDFDocument from "pdfkit";
+import fs from "fs";
+import path from "path";
 
 export const agregarProductosAlCarrito = async (req, res) => {
     try {
@@ -122,10 +125,31 @@ export const completarCompra = async (req, res) => {
 
         await Carrito.findByIdAndDelete(carritoId);
 
+        const doc = new PDFDocument();
+        const filePath = path.join(__dirname, '../../public/facturas', `factura_${factura._id}.pdf`);
+        doc.pipe(fs.createWriteStream(filePath));
+
+        doc.fontSize(25).text('Factura', { align: 'center' });
+        doc.moveDown();
+        doc.fontSize(16).text(`ID de Factura: ${factura._id}`);
+        doc.text(`Fecha: ${factura.fecha}`);
+        doc.text(`Total: Q${factura.total}`);
+        doc.moveDown();
+        doc.text('Productos:');
+        doc.moveDown();
+
+        factura.productos.forEach((item, index) => {
+            doc.text(`${index + 1}. ${item.productoId.nombrePro} - Cantidad: ${item.cantidad}`);
+            doc.text('----------------------------------------');
+        });
+
+        doc.end();
+
         res.status(200).json({
             success: true,
             message: "Compra completada con éxito",
-            factura
+            factura,
+            pdfPath: filePath
         });
     } catch (err) {
         res.status(500).json({

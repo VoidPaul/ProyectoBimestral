@@ -24,3 +24,31 @@ export const historialFactura = async (req, res) => {
         });
     }
 };
+
+export const actualizarFactura = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const data = req.body;
+
+        const facturaActualizada = await Factura.findByIdAndUpdate(id, data, { new: true });
+
+        if (!facturaActualizada) {
+            return res.status(404).json({
+                success: false,
+                message: "Factura no encontrada"
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Factura actualizada exitosamente",
+            factura: facturaActualizada
+        });
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: "Error al actualizar la factura",
+            error: err.message
+        });
+    }
+};

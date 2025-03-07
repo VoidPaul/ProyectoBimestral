@@ -4,9 +4,9 @@ import { validarCarrito } from "../middlewares/carrito-validate.js";
 
 const router = Router();
 
-router.post("/agregarCarrito/", validarCarrito, agregarProductosAlCarrito);
+router.post("/agregarCarrito", validarCarrito, agregarProductosAlCarrito);
 
-router.get("/verProductos/", validarCarrito, obtenerProductosDelCarrito);
+router.get("/", validarCarrito, obtenerProductosDelCarrito);
 
 router.post("/completarCompra/:carritoId", validarCarrito, completarCompra);
 
