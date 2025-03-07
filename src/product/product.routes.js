@@ -8,9 +8,9 @@ router.post("/addProduct",createdProductValidator, addProduct);
 
 router.get("/findProduct/:nameProduct", getProductByNameValidator, getProductByName);
 
-router.get("/productCatalog/", getProduct);
+router.get("/", getProduct);
 
-router.get("/productCatalog/category/:uid", getProductByCategory);
+router.get("/category/:categoryId", getProductByCategory);
 
 router.get("/soldOut/", getProductSouldOutValidator, getProductSoldOut);
 

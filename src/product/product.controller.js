@@ -4,9 +4,7 @@ import Category from "../categoria/categoria.model.js";
 export const addProduct = async (req, res) => {
     try {
         const data = req.body;
-        const category = await Category.findOne({ nombre: data.category });
-        let imageProduct = req.file ? req.file.filename : null;
-        data.imageProduct = imageProduct;
+        const category = await Category.findById(data.category);
 
         if (!category) {
             return res.status(404).json({
@@ -37,25 +35,24 @@ export const addProduct = async (req, res) => {
 
 export const getProductByName = async (req, res) => {
     try {
-        const { nameProduct } = req.params;
-        const product = await Product.findOne({ nameProduct }).populate("category", "nombre -_id");
+        const { name } = req.params;
+        const product = await Product.findOne({ name });
 
         if (!product) {
             return res.status(404).json({
                 success: false,
-                message: "Product not found."
+                message: 'Product not found',
             });
         }
 
-        return res.status(200).json({
+        res.status(200).json({
             success: true,
             product
         });
-
     } catch (error) {
-        return res.status(500).json({
+        res.status(500).json({
             success: false,
-            message: 'Error when searching for the product',
+            message: 'Error fetching product',
             error: error.message
         });
     }
@@ -63,18 +60,15 @@ export const getProductByName = async (req, res) => {
 
 export const getProduct = async (req, res) => {
     try {
-        const products = await Product.find().populate("category", "nombre");
-
-        return res.status(200).json({
+        const products = await Product.find();
+        res.status(200).json({
             success: true,
-            message: "Product Catalog",
-            total: products.length,
             products
         });
     } catch (error) {
-        return res.status(500).json({
+        res.status(500).json({
             success: false,
-            message: 'Error when displaying the product catalog.',
+            message: 'Error fetching products',
             error: error.message
         });
     }
@@ -82,28 +76,28 @@ export const getProduct = async (req, res) => {
 
 export const getProductByCategory = async (req, res) => {
     try {
-        const { uid } = req.params;
-
-        const category = await Category.findById(uid);
-        if (!category) {
-            return res.status(400).json({
+        const { categoryId } = req.params;
+        console.log(`Fetching products for category: ${categoryId}`);
+        
+        const categoryExists = await Category.findById(categoryId);
+        if (!categoryExists) {
+            return res.status(404).json({
                 success: false,
-                message: "Category not found"
+                message: 'Category not found',
             });
         }
 
-        const products = await Product.find({ category: uid });
-
+        const products = await Product.find({ category: categoryId });
+        console.log(`Products found: ${products.length}`);
         res.status(200).json({
             success: true,
-            total: products.length,
             products
         });
-
     } catch (error) {
-        return res.status(500).json({
+        console.error(`Error fetching products by category: ${error.message}`);
+        res.status(500).json({
             success: false,
-            message: 'Error when displaying the product catalog by category.',
+            message: 'Error fetching products by category',
             error: error.message
         });
     }
@@ -111,17 +105,21 @@ export const getProductByCategory = async (req, res) => {
 
 export const getProductSoldOut = async (req, res) => {
     try {
+        console.log('Fetching sold out products');
+        
         const products = await Product.find({ stock: 0 });
-
+        
+        console.log(`Sold out products found: ${products.length}`);
+        
         res.status(200).json({
             success: true,
-            total: products.length,
             products
         });
     } catch (error) {
-        return res.status(500).json({
+        console.error(`Error fetching sold out products: ${error.message}`);
+        res.status(500).json({
             success: false,
-            message: 'Error when displaying the product catalog.',
+            message: 'Error fetching sold out products',
             error: error.message
         });
     }
@@ -134,12 +132,18 @@ export const updateProduct = async (req, res) => {
 
         const product = await Product.findByIdAndUpdate(uid, data, { new: true });
 
+        if (!product) {
+            return res.status(404).json({
+                success: false,
+                message: 'Product not found',
+            });
+        }
+
         res.status(200).json({
             success: true,
-            message: 'Product updated successfully.',
+            message: 'actualizado con exito',
             product
         });
-
     } catch (error) {
         return res.status(500).json({
             success: false,
@@ -151,24 +155,14 @@ export const updateProduct = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
     try {
-        const { uid } = req.params;
-
-        const product = await Product.findByIdAndDelete(uid);
-
-        if (!product) {
-            return res.status(404).json({
-                success: false,
-                message: 'Product not found'
-            });
-        }
-
-        return res.status(200).json({
+        const { productId } = req.params;
+        await Product.findByIdAndDelete(productId);
+        res.status(200).json({
             success: true,
-            message: 'Product deleted successfully.',
-            product
+            message: 'Product deleted successfully'
         });
     } catch (error) {
-        return res.status(500).json({
+        res.status(500).json({
             success: false,
             message: 'Error deleting product',
             error: error.message
@@ -178,20 +172,17 @@ export const deleteProduct = async (req, res) => {
 
 export const getTopSellingProducts = async (req, res) => {
     try {
-        const topSellingProducts = await Product.find().sort({ sales: -1 }).limit(10);
-
-        return res.status(200).json({
+        const products = await Product.find().sort({ sales: -1 }).limit(10);
+        res.status(200).json({
             success: true,
-            message: 'Top selling products',
-            total: topSellingProducts.length,
-            topSellingProducts
+            products
         });
-
     } catch (error) {
-        return res.status(500).json({
+        res.status(500).json({
             success: false,
-            message: 'Error getting top selling products',
+            message: 'Error fetching top selling products',
             error: error.message
         });
     }
 };
+
