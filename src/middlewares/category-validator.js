@@ -14,7 +14,6 @@ const categoryExists = async (id) => {
 
 export const createdCategoryValidator = [
     validateJWT,
-    hasRoles("ADMIN_ROLE"),
     body("nombre").notEmpty().withMessage("El nombre de la categoría es requerido"),
     body("descripcion").notEmpty().withMessage("La descripción es requerida"),
     validarCampos,
@@ -23,7 +22,6 @@ export const createdCategoryValidator = [
 
 export const updateCategoryValidator = [
     validateJWT,
-    hasRoles("ADMIN_ROLE"),
     param("id").isMongoId().withMessage("No es un ID válido de MongoDB").custom(categoryExists),
     body("descripcion").optional().notEmpty().withMessage("La descripción es requerida"),
     validarCampos,
@@ -32,7 +30,6 @@ export const updateCategoryValidator = [
 
 export const deleteCategoryValidator = [
     validateJWT,
-    hasRoles("ADMIN_ROLE"),
     param("id").isMongoId().withMessage("No es un ID válido de MongoDB").custom(categoryExists),
     validarCampos,
     handleErrors
